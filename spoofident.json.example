@@ -3,7 +3,7 @@
 		[ "0.0.0.0", 113 ],
 		[ "::", 113 ]
 	],
-	"setuid": 1000,
+	"setuid": 65534,
 	"user": "fakeuser",
 	"os": "SPOOF"
 }
