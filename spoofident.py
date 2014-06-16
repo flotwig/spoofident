@@ -1,16 +1,26 @@
 from os import setuid,setgid,path
 from json import load
+from time import time
+from select import select
 import socket
-import select
 def handleIdent(fd):
-	data=fd.recv(1024).strip()
+	begin=time()
+	fd.setblocking(0)
+	data=''
+	while time()-begin<1:
+		try:
+			data=fd.recv(1024).strip()
+			if data: break
+		except:
+			pass
 	ports=data.split(',',2)
 	ports=map(validPort,ports)
-	if len(ports)<2 or (not ports[0] or not ports[1]):
-		fd.send('0,0 : ERROR : INVALID-PORT')
+	if not data:
+		fd.send('0,0:ERROR:UNKNOWN-ERROR\r\n')
+	elif len(ports)<2 or (not ports[0] or not ports[1]):
+		fd.send('0,0:ERROR:INVALID-PORT\r\n')
 	else:
-		fd.send(data + ' : USERID : '+settings['os']+' : '+settings['user'])
-	fd.send('\r\n')
+		fd.send(str(ports[0])+','+str(ports[1])+':USERID:'+settings['os']+':'+settings['user']+'\r\n')
 	fd.close()
 def validPort(port):
 	try:
@@ -32,14 +42,16 @@ if __name__ == '__main__':
 			servers.append(socket.socket(socket.AF_INET6,socket.SOCK_STREAM))
 		else:
 			servers.append(socket.socket(socket.AF_INET,socket.SOCK_STREAM))
-		print(str(pair[0])+'and'+str(pair[1]))
 		servers[-1].bind((pair[0], pair[1]))
 		servers[-1].listen(5)
 		servers[-1].setblocking(0)
 	setgid(settings['setgid'])
 	setuid(settings['setuid'])
 	while True:
-		inready,outready,excready=select.select(servers,[],[])
+		inready,outready,excready=select(servers,[],[])
 		for ready in inready:
-			client,addr=ready.accept()
-			handleIdent(client)
+			if ready in servers:
+				client,addr=ready.accept()
+				inready.append(client)
+			else:
+				handleIdent(ready)
