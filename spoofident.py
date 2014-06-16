@@ -5,8 +5,8 @@ def handleIdent(fd):
 	data=fd.recv(1024).strip()
 	ports=data.split(',',2)
 	ports=map(validPort,ports)
-	if not ports[0] or not ports[1]:
-		fd.send('0 , 0 : ERROR : INVALID-PORT')
+	if len(ports)<2 or (not ports[0] or not ports[1]):
+		fd.send('0,0 : ERROR : INVALID-PORT')
 	else:
 		fd.send(data + ' : USERID : '+settings['os']+' : '+settings['user'])
 	fd.send('\r\n')
