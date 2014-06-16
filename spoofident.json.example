@@ -4,6 +4,7 @@
 		[ "::", 113 ]
 	],
 	"setuid": 65534,
+	"setgid": 65534,
 	"user": "fakeuser",
 	"os": "SPOOF"
 }

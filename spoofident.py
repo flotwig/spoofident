@@ -1,4 +1,4 @@
-from os import setuid
+from os import setuid,setgid
 from json import load
 import dualstack
 def handleIdent(fd):
@@ -20,6 +20,7 @@ if __name__ == "__main__":
 	settings=load(config)
 	config.close()
 	server = dualstack.MultipleSocketsListener(settings['listeners'])
+	setgid(settings['setgid'])
 	setuid(settings['setuid'])
 	while True:
 		conn,addr=server.accept()
