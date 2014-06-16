@@ -12,7 +12,7 @@ def handleIdent(fd):
 			data=fd.recv(1024).strip()
 			if data: break
 		except:
-			pass
+			pass # TODO: catch exceptions which are actual errors, as opposed to no-data reports
 	ports=data.split(',',2)
 	ports=map(validPort,ports)
 	if not data:
@@ -54,4 +54,7 @@ if __name__ == '__main__':
 				client,addr=ready.accept()
 				inready.append(client)
 			else:
-				handleIdent(ready)
+				try:
+					handleIdent(ready)
+				except:
+					pass
