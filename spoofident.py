@@ -1,4 +1,4 @@
-from os import setuid,setgid
+from os import setuid,setgid,path
 from json import load
 import dualstack
 def handleIdent(fd):
@@ -16,7 +16,8 @@ def validPort(port):
 	else:
 		return False
 if __name__ == "__main__":
-	config=open('spoofident.json','r')
+	pwd=path.dirname(path.realpath(__file__))
+	config=open(pwd+'/spoofident.json','r')
 	settings=load(config)
 	config.close()
 	server = dualstack.MultipleSocketsListener(settings['listeners'])
