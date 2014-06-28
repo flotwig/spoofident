@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from os import setuid,setgid,path
 from json import load
 from time import time
