@@ -3,8 +3,7 @@ spoofident
 
 Spoof ident daemon. Nimble Pythonic spoof identd. Please note that this is not a "real" identd -- it will not return correct information for which user is using which port. Instead, it will reply with a username and OS of your choice to all requests.
 
-Installation
-====
+## Installation
 1. git clone the repo  
 	`git clone git@github.com:flotwig/spoofident.git`  
 	`cd ./spoofident/`
