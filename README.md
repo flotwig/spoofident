@@ -22,7 +22,7 @@ docker run -p 113:113 \
 ### Sample `docker-compose.yml`
 
 ```yml
-  ci-status-checks:
+  spoofident:
     image: 'flotwig/spoofident:latest'
     restart: always
     volumes:
