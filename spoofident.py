@@ -7,16 +7,16 @@ import socket
 def handleIdent(fd):
 	fd.settimeout(1)
 	try:
-		data=fd.recv(1024).strip()
+		data=fd.recv(1024).decode('UTF-8').strip()
 	except:
-		fd.send('0,0:ERROR:UNKNOWN-ERROR\r\n') # TODO: catch exceptions which are actual errors, as opposed to no-data reports
+		fd.send('0,0:ERROR:UNKNOWN-ERROR\r\n'.encode('UTF-8')) # TODO: catch exceptions which are actual errors, as opposed to no-data reports
 		return
 	ports=data.split(',',2)
-	ports=map(validPort,ports)
+	ports=list(map(validPort,ports))
 	if len(ports)<2 or not all(ports):
-		fd.send('0,0:ERROR:INVALID-PORT\r\n')
+		fd.send('0,0:ERROR:INVALID-PORT\r\n'.encode('UTF-8'))
 	else:
-		fd.send(','.join(map(str,ports))+':USERID:'+settings['os']+':'+settings['user']+'\r\n')
+		fd.send((','.join(map(str,ports))+':USERID:'+settings['os']+':'+settings['user']+'\r\n').encode('UTF-8'))
 	fd.close()
 def validPort(port):
 	try:
